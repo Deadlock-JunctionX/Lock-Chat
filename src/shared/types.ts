@@ -24,6 +24,18 @@ export interface SavedUser {
   phoneNumber: string | null;
 }
 
+export enum SendMoneyIntentionType {
+  SEND,
+  RECEIVE,
+}
+
+export type SendMoneyIntention = {
+  user: string;
+  money: string;
+  type: SendMoneyIntentionType
+};
+
+
 export interface MessageItem {
   id?: string;
   sender: string;
@@ -41,6 +53,7 @@ export interface MessageItem {
   reactions: {
     [key: string]: number;
   };
+  intent: SendMoneyIntentionType;
 }
 
 export interface StickerCollection {

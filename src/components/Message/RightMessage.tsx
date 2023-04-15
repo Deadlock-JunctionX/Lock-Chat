@@ -10,7 +10,11 @@ import ClickAwayListener from "../ClickAwayListener";
 import { EMOJI_REGEX } from "../../shared/constants";
 import FileIcon from "../FileIcon";
 import ImageView from "../ImageView";
-import { MessageItem } from "../../shared/types";
+import {
+  MessageItem,
+  SendMoneyIntention,
+  SendMoneyIntentionType,
+} from "../../shared/types";
 import ReactionPopup from "../Chat/ReactionPopup";
 import ReactionStatus from "../Chat/ReactionStatus";
 import ReplyBadge from "../Chat/ReplyBadge";
@@ -19,6 +23,7 @@ import SpriteRenderer from "../SpriteRenderer";
 import { db } from "../../shared/firebase";
 import { useParams } from "react-router-dom";
 import { useStore } from "../../store";
+import { ReplyWrapper } from "../Chat/ReplyWrapper";
 
 interface RightMessageProps {
   message: MessageItem;
@@ -87,7 +92,16 @@ const RightMessage: FC<RightMessageProps> = ({ message, setReplyInfo }) => {
                 {splitLinkFromMessage(message.content).map((item, index) => (
                   <Fragment key={index}>
                     {typeof item === "string" ? (
-                      <span>{item}</span>
+                      <ReplyWrapper
+                        key={index}
+                        intent={{
+                          money: "10000",
+                          user: "asld",
+                          type: SendMoneyIntentionType.RECEIVE,
+                        }}
+                      >
+                        <span>{item}</span>
+                      </ReplyWrapper>
                     ) : (
                       <a
                         className="mx-1 inline underline"

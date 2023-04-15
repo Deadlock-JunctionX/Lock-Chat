@@ -1,5 +1,5 @@
 import { DEFAULT_AVATAR, IMAGE_PROXY } from "../../shared/constants";
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { collection, orderBy, query, where } from "firebase/firestore";
 
@@ -31,6 +31,10 @@ const SideBar: FC = () => {
       where("users", "array-contains", currentUser?.uid)
     )
   );
+
+  useEffect(() => {
+    console.log("MTFK err", error, data);
+  }, [error]);
 
   const location = useLocation();
 
@@ -108,7 +112,7 @@ const SideBar: FC = () => {
           </div>
         ) : error ? (
           <div className="my-6 flex justify-center">
-            <p className="text-center">Something went wrong</p>
+            <p className="text-center">Something went wrong Fucker {error}</p>
           </div>
         ) : data?.empty ? (
           <div className="my-6 flex flex-col items-center justify-center">

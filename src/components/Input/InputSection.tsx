@@ -121,6 +121,8 @@ const InputSection: FC<InputSectionProps> = ({
 
     setReplyInfo && setReplyInfo(null);
 
+    const intent = 0 //Take from API
+
     addDoc(
       collection(db, "conversations", conversationId as string, "messages"),
       {
@@ -129,6 +131,7 @@ const InputSection: FC<InputSectionProps> = ({
         type: "text",
         createdAt: serverTimestamp(),
         replyTo: replyInfo?.id || null,
+        intent: intent
       }
     );
 

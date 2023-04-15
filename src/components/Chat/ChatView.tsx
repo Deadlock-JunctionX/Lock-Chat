@@ -18,6 +18,7 @@ import { db } from "../../shared/firebase";
 import { useCollectionQuery } from "../../hooks/useCollectionQuery";
 import { useParams } from "react-router-dom";
 import { useStore } from "../../store";
+import { SendMoneyForm } from "./ReplyWrapper";
 
 interface ChatViewProps {
   conversation: ConversationInfo;
@@ -39,6 +40,14 @@ const ChatView: FC<ChatViewProps> = ({
   const scrollBottomRef = useRef<HTMLDivElement>(null);
 
   const [limitCount, setLimitCount] = useState(10);
+  const [modalVisible, setModalVisible] = useState<boolean>(false);
+  const showModal = () => {
+    setModalVisible(true);
+  };
+
+  const hideModal = () => {
+    setModalVisible(false);
+  };
 
   const { data, loading, error } = useCollectionQuery(
     `conversation-data-${conversationId}-${limitCount}`,
@@ -147,12 +156,15 @@ const ChatView: FC<ChatViewProps> = ({
             <Fragment key={item.id}>
               {item.sender === currentUser?.uid ? (
                 <RightMessage
+                  showModal={showModal}
                   replyInfo={replyInfo}
                   setReplyInfo={setReplyInfo}
                   message={item}
+                  intent={item.intent}
                 />
               ) : (
                 <LeftMessage
+                  showModal={showModal}
                   replyInfo={replyInfo}
                   setReplyInfo={setReplyInfo}
                   message={item}
@@ -179,6 +191,12 @@ const ChatView: FC<ChatViewProps> = ({
           ))}
         <div ref={scrollBottomRef}></div>
       </div>
+      <SendMoneyForm
+        visible={modalVisible}
+        onClose={() => {
+          setModalVisible(false);
+        }}
+      />
     </InfiniteScroll>
   );
 };

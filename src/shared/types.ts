@@ -27,6 +27,7 @@ export interface SavedUser {
 export enum SendMoneyIntentionType {
   SEND,
   RECEIVE,
+  NOTHING
 }
 
 export type SendMoneyIntention = {

@@ -32,10 +32,6 @@ const SideBar: FC = () => {
     )
   );
 
-  useEffect(() => {
-    console.log("MTFK err", error, data);
-  }, [error]);
-
   const location = useLocation();
 
   return (

@@ -2,7 +2,6 @@ import { FC, useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 import { auth, db } from "./shared/firebase";
 import { doc, setDoc } from "firebase/firestore";
-
 import BarWave from "react-cssfx-loading/src/BarWave";
 import Chat from "./pages/Chat";
 import Home from "./pages/Home";
@@ -10,6 +9,7 @@ import PrivateRoute from "./components/PrivateRoute";
 import SignIn from "./pages/SignIn";
 import { onAuthStateChanged } from "firebase/auth";
 import { useStore } from "./store";
+import 'antd/dist/reset.css';
 const getPhoneNum = (email: string): string | null => {
   switch (email) {
     case "hson7820.fpt@gmail.com":

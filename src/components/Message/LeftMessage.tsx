@@ -25,6 +25,7 @@ interface LeftMessageProps {
   docs: any[];
   replyInfo: any;
   setReplyInfo: (value: any) => void;
+  showModal: () => void;
 }
 
 const LeftMessage: FC<LeftMessageProps> = ({

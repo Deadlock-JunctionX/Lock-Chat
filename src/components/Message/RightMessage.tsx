@@ -28,10 +28,12 @@ import { ReplyWrapper } from "../Chat/ReplyWrapper";
 interface RightMessageProps {
   message: MessageItem;
   replyInfo: any;
+  intent?: SendMoneyIntentionType
   setReplyInfo: (value: any) => void;
+  showModal: () => void;
 }
 
-const RightMessage: FC<RightMessageProps> = ({ message, setReplyInfo }) => {
+const RightMessage: FC<RightMessageProps> = ({ message, setReplyInfo, showModal, intent }) => {
   const [isSelectReactionOpened, setIsSelectReactionOpened] = useState(false);
 
   const { id: conversationId } = useParams();
@@ -94,10 +96,11 @@ const RightMessage: FC<RightMessageProps> = ({ message, setReplyInfo }) => {
                     {typeof item === "string" ? (
                       <ReplyWrapper
                         key={index}
+                        showModal={showModal}
                         intent={{
                           money: "10000",
                           user: "asld",
-                          type: SendMoneyIntentionType.RECEIVE,
+                          type: intent ?? SendMoneyIntentionType.NOTHING,
                         }}
                       >
                         <span>{item}</span>

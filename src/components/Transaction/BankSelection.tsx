@@ -10,6 +10,11 @@ const size = 25
 
 const items = [
     {
+        label: 'Lock Money',
+        key: 'DeadLock',
+        icon: <Image src={"/bank-icons/DeadLock.png"} width={size} />
+    },
+    {
         label: 'ACB',
         key: 'ACB',
         icon: <Image src={"/bank-icons/ACB.png"} width={size} />
@@ -59,22 +64,15 @@ const items = [
 
 const BankSelection: React.FC = () => (
 
-    // <Dropdown menu={{ items }} trigger={['click']}>
-    //     <Button onClick={(e) => e.preventDefault()}>
-    //     <Space>
-    //       ngân hàng nào? <EllipsisOutlined />
-    //     </Space>
-    //   </Button>
-    // </Dropdown>
     <Select
+        defaultValue={"Lock Money"}
         placeholder="ngân hàng nào?"
         bordered={false}
     >
         {items.map(item => (
           <Option key={item.key} value={item.label} align="center">
             <Space align="center">
-
-           {item.icon} {item.key}
+                {item.icon} {item.key}
             </Space>
           </Option>
         ))}

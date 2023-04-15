@@ -1,6 +1,6 @@
 import { ValidateStatus } from "antd/es/form/FormItem";
 import { SmileOutlined, VerticalRightOutlined, VerticalLeftOutlined, NumberOutlined, UserOutlined } from "@ant-design/icons";
-import { Button, Form, FormInstance, Input, message, Result, Space, theme } from "antd";
+import { Button, Form, FormInstance, Input, message, Result, Space, theme, Typography } from "antd";
 import { useEffect, useState } from "react";
 import { getUserAccount, impersonateUser, submitTransaction } from "./api";
 import PinInput from "react-pin-input";
@@ -8,6 +8,7 @@ import { User } from "firebase/auth";
 import React from "react";
 import BankSelection from "./BankSelection";
 
+const { Title } = Typography;
 export interface MoneyTransactionProp {
   otherUser?: User;
 }
@@ -40,11 +41,7 @@ export const MoneyTransaction = (props: MoneyTransactionProp) => {
           setStatus={(value: boolean) => setSecCondition(value)}
         />
       ),
-    },
-    {
-      title: "Kết quả",
-      content: <MoneyTransactionSuccess />,
-    },
+    }
   ];
 
   const { token } = theme.useToken();
@@ -72,19 +69,22 @@ export const MoneyTransaction = (props: MoneyTransactionProp) => {
 
   return (
     <div style={{ marginTop: "2rem" }}>
+      <Space direction="horizontal" style={{ width: '100%', justifyContent: 'center' }}>
+        <Title level={5}>{steps[current].title}</Title>
+      </Space>
       <div style={contentStyle}>{steps[current].content}</div>
       <div style={{ marginTop: 24 }}>
-      <Space direction="horizontal" style={{width: '100%', justifyContent: 'center'}}>
-        {current == 0 && (
-          <Button
-          style={{ backgroundColor: "#4096ff" }}
-          type="primary"
-          onClick={() => next()}
-        >
-          Hoàn thành
-        </Button>
-        )}
-      </Space>
+        <Space direction="horizontal" style={{ width: '100%', justifyContent: 'center' }}>
+          {current == 0 && (
+            <Button
+              style={{ backgroundColor: "#4096ff" }}
+              type="primary"
+              onClick={() => next()}
+            >
+              Hoàn thành
+            </Button>
+          )}
+        </Space>
       </div>
     </div>
   );
@@ -169,6 +169,7 @@ const MoneyTransactionPinConfirm = ({ setStatus }: any) => {
           //   setPinStatus("success");
           //   setStatus(true);
           // });
+
         });
       else {
         setPinErrorMsg("Mã PIN sai rồi");
@@ -191,12 +192,12 @@ const MoneyTransactionPinConfirm = ({ setStatus }: any) => {
       >
         <PinInput
           length={6}
-          secret
           onChange={(value, index) => {
             setPinValue(value);
           }}
           type="numeric"
           inputMode="number"
+          inputFocusStyle={{borderColor: 'blue'}}
         />
       </Form.Item>
     </Form>

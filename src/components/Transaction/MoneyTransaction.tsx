@@ -1,19 +1,6 @@
-import {
-  SmileOutlined,
-  VerticalLeftOutlined,
-  VerticalRightOutlined,
-} from "@ant-design/icons";
-import {
-  Button,
-  Form,
-  FormInstance,
-  Input,
-  message,
-  Result,
-  Steps,
-  theme,
-} from "antd";
 import { ValidateStatus } from "antd/es/form/FormItem";
+import { SmileOutlined, VerticalRightOutlined, VerticalLeftOutlined, NumberOutlined, UserOutlined } from "@ant-design/icons";
+import { Button, Form, FormInstance, Input, message, Result, Space, theme } from "antd";
 import { useEffect, useState } from "react";
 import { getUserAccount, impersonateUser, submitTransaction } from "./api";
 import PinInput from "react-pin-input";
@@ -87,27 +74,17 @@ export const MoneyTransaction = (props: MoneyTransactionProp) => {
     <div style={{ marginTop: "2rem" }}>
       <div style={contentStyle}>{steps[current].content}</div>
       <div style={{ marginTop: 24 }}>
-        {current > 0 && (
+      <Space direction="horizontal" style={{width: '100%', justifyContent: 'center'}}>
+        {current == 0 && (
           <Button
-            shape="round"
-            icon={<VerticalRightOutlined />}
-            onClick={() => prev()}
-          />
+          style={{ backgroundColor: "#4096ff" }}
+          type="primary"
+          onClick={() => next()}
+        >
+          Hoàn thành
+        </Button>
         )}
-        {current < steps.length - 1 && (
-          <Button
-            shape="round"
-            icon={<VerticalLeftOutlined />}
-            onClick={() => next()}
-          />
-        )}
-        {current === steps.length - 1 && (
-          <Button
-            shape="round"
-            icon={<VerticalLeftOutlined />}
-            onClick={() => message.success("Processing complete!")}
-          />
-        )}
+      </Space>
       </div>
     </div>
   );
@@ -149,14 +126,6 @@ const MoneyTransactionForm = ({
       }}
     >
       <Form.Item
-        label="Name"
-        name="name"
-        rules={[{ required: true, message: "Nhập họ tên của người nhận" }]}
-      >
-        <Input />
-      </Form.Item>
-
-      <Form.Item
         label="Bạn muốn chuyển khoản đến"
         name="bank"
         rules={[{ required: true, message: "Please input your bank!" }]}
@@ -169,8 +138,17 @@ const MoneyTransactionForm = ({
         name="bankNumber"
         rules={[{ required: true, message: "Please input your STK" }]}
       >
-        <Input bordered={false} />
+        <Input placeholder="_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _" prefix={<NumberOutlined />} bordered={false} />
       </Form.Item>
+
+      <Form.Item
+        label="Họ tên người nhận"
+        name="name"
+        rules={[{ required: true, message: "Please input your name!" }]}
+      >
+        <Input prefix={<UserOutlined />} bordered={false} />
+      </Form.Item>
+
     </Form>
   );
 };

@@ -32,9 +32,10 @@ export const ReplyWrapper = (props: ReplyWrapperProps) => {
 export const SendMoneyForm = (props: any) => {
   return (
     <Modal
+      centered
       open={props.visible}
-      footer={null}
       onCancel={props.onClose}
+      footer={null}
     >
       <MoneyTransaction otherUser={props.otherUser} />
     </Modal>

@@ -1,9 +1,9 @@
-import { SmileOutlined } from "@ant-design/icons";
+import { SmileOutlined, VerticalRightOutlined, VerticalLeftOutlined } from "@ant-design/icons";
 import { Button, Form, Input, message, Result, Steps, theme } from "antd";
 import { useEffect, useState } from "react";
-import { SendMoneyForm } from "../Chat/ReplyWrapper";
+import BankSelection from "./BankSelection";
 
-export interface MoneyTransactionProp {}
+export interface MoneyTransactionProp { }
 
 export const MoneyTransaction = (props: MoneyTransactionProp) => {
   const steps = [
@@ -46,30 +46,25 @@ export const MoneyTransaction = (props: MoneyTransactionProp) => {
 
   return (
     <div style={{ marginTop: "2rem" }}>
-      <Steps current={current} items={items} />
       <div style={contentStyle}>{steps[current].content}</div>
       <div style={{ marginTop: 24 }}>
+        {current > 0 && (
+          <Button  shape="round" icon={<VerticalRightOutlined />} onClick={()=>prev()}/>
+        )}
         {current < steps.length - 1 && (
-          <Button type="primary" onClick={() => next()}>
-            Next
-          </Button>
+          <Button  shape="round" icon={<VerticalLeftOutlined />} onClick={()=>next()}/>
         )}
         {current === steps.length - 1 && (
-          <Button
-            type="primary"
-            onClick={() => message.success("Processing complete!")}
-          >
-            Done
-          </Button>
-        )}
-        {current > 0 && (
-          <Button style={{ margin: "0 8px" }} onClick={() => prev()}>
-            Previous
-          </Button>
+          <Button shape="round" icon={<VerticalLeftOutlined />} onClick={() => message.success("Processing complete!")}/>
         )}
       </div>
     </div>
   );
+};
+
+const layout = {
+  labelCol: { span: 8 },
+  wrapperCol: { span: 16 },
 };
 
 const MoneyTransactionForm = ({ setUserAccountInfo }: any) => {
@@ -86,11 +81,9 @@ const MoneyTransactionForm = ({ setUserAccountInfo }: any) => {
   return (
     <Form
       name="send-money-form"
-      initialValues={{ remember: true }}
       onFinish={onFinish}
       onFinishFailed={onFinishFailed}
       autoComplete="off"
-      layout="vertical"
       onSubmitCapture={() => {
         getUserAccount("").then((data) => {
           setUserAccountInfo(data);
@@ -106,19 +99,19 @@ const MoneyTransactionForm = ({ setUserAccountInfo }: any) => {
       </Form.Item>
 
       <Form.Item
-        label="Bank"
+        label="Bạn muốn chuyển khoản đến"
         name="bank"
         rules={[{ required: true, message: "Please input your bank!" }]}
       >
-        <Input />
+        <BankSelection />
       </Form.Item>
 
       <Form.Item
-        label="STK"
+        label="Số tài khoản người nhận"
         name="stk"
         rules={[{ required: true, message: "Please input your STK" }]}
       >
-        <Input />
+        <Input bordered={false} />
       </Form.Item>
     </Form>
   );

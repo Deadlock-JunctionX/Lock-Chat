@@ -122,7 +122,14 @@ const InputSection: FC<InputSectionProps> = ({
 
     setReplyInfo && setReplyInfo(null);
 
-    axios.post(`http://localhost:8000/process?ms=${replacedInputValue}`)
+    axios({
+      method: 'post',
+      url: `http://localhost:8000/process`,
+      headers: {}, 
+      data: {
+        ms: replacedInputValue, 
+      }
+    })
     .then(res => {
       const intent = res.data
       addDoc(

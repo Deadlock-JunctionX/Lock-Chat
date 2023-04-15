@@ -1,3 +1,4 @@
+import { User } from 'firebase/auth';
 export interface ConversationInfo {
   users: string[];
   group?: {
@@ -31,7 +32,7 @@ export enum SendMoneyIntentionType {
 }
 
 export type SendMoneyIntention = {
-  user: string;
+  user?: User | null;
   money: string;
   type: SendMoneyIntentionType
 };

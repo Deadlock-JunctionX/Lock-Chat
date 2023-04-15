@@ -3,10 +3,12 @@ import { FC, Fragment, useEffect, useRef, useState } from "react";
 import {
   collection,
   doc,
+  getDocs,
   limitToLast,
   orderBy,
   query,
   updateDoc,
+  where,
 } from "firebase/firestore";
 
 import AvatarFromId from "./AvatarFromId";
@@ -19,6 +21,7 @@ import { useCollectionQuery } from "../../hooks/useCollectionQuery";
 import { useParams } from "react-router-dom";
 import { useStore } from "../../store";
 import { SendMoneyForm } from "./ReplyWrapper";
+import { User } from "firebase/auth";
 
 interface ChatViewProps {
   conversation: ConversationInfo;
@@ -61,6 +64,19 @@ const ChatView: FC<ChatViewProps> = ({
   const dataRef = useRef(data);
   const conversationIdRef = useRef(conversationId);
   const isWindowFocus = useRef(true);
+
+  const [otherUser, setOtherUser] = useState<User>();
+  useEffect(() => {
+    const otherUserId = conversation.users.filter(
+      (user) => user !== currentUser?.uid
+    )[0];
+    const q = query(collection(db, "users"), where("uid", "==", otherUserId));
+    getDocs(q).then((data) => {
+      data.forEach((data) => {
+        setOtherUser(data.data() as User);
+      });
+    });
+  }, []);
 
   useEffect(() => {
     dataRef.current = data;
@@ -161,6 +177,7 @@ const ChatView: FC<ChatViewProps> = ({
                   setReplyInfo={setReplyInfo}
                   message={item}
                   intent={item.intent}
+                  conversation={conversation}
                 />
               ) : (
                 <LeftMessage
@@ -192,6 +209,7 @@ const ChatView: FC<ChatViewProps> = ({
         <div ref={scrollBottomRef}></div>
       </div>
       <SendMoneyForm
+        otherUser={otherUser}
         visible={modalVisible}
         onClose={() => {
           setModalVisible(false);

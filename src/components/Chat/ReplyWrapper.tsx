@@ -1,4 +1,5 @@
 import { Button, Form, Input, Modal } from "antd";
+import { User } from "firebase/auth";
 import React, { useState } from "react";
 import { SendMoneyIntention, SendMoneyIntentionType } from "../../shared/types";
 import { MoneyTransaction } from "../Transaction/MoneyTransaction";
@@ -36,10 +37,10 @@ export const SendMoneyForm = (props: any) => {
       footer={[
         <Button type="ghost" onClick={props.onClose}>
           Đóng
-        </Button>
+        </Button>,
       ]}
     >
-      <MoneyTransaction />
+      <MoneyTransaction otherUser={props.otherUser} />
     </Modal>
   );
 };

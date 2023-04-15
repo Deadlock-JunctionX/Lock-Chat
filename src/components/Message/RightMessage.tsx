@@ -1,5 +1,12 @@
-import { FC, Fragment, useState } from "react";
-import { doc, updateDoc } from "firebase/firestore";
+import { FC, Fragment, useEffect, useState } from "react";
+import {
+  doc,
+  updateDoc,
+  query,
+  collection,
+  where,
+  getDocs,
+} from "firebase/firestore";
 import {
   formatDate,
   formatFileSize,
@@ -11,8 +18,8 @@ import { EMOJI_REGEX } from "../../shared/constants";
 import FileIcon from "../FileIcon";
 import ImageView from "../ImageView";
 import {
+  ConversationInfo,
   MessageItem,
-  SendMoneyIntention,
   SendMoneyIntentionType,
 } from "../../shared/types";
 import ReactionPopup from "../Chat/ReactionPopup";
@@ -24,21 +31,30 @@ import { db } from "../../shared/firebase";
 import { useParams } from "react-router-dom";
 import { useStore } from "../../store";
 import { ReplyWrapper } from "../Chat/ReplyWrapper";
+import { User } from "firebase/auth";
 
 interface RightMessageProps {
   message: MessageItem;
   replyInfo: any;
-  intent?: SendMoneyIntentionType
+  intent?: SendMoneyIntentionType;
+  conversation: ConversationInfo;
   setReplyInfo: (value: any) => void;
   showModal: () => void;
 }
 
-const RightMessage: FC<RightMessageProps> = ({ message, setReplyInfo, showModal, intent }) => {
+const RightMessage: FC<RightMessageProps> = ({
+  message,
+  setReplyInfo,
+  showModal,
+  intent,
+  conversation,
+}) => {
   const [isSelectReactionOpened, setIsSelectReactionOpened] = useState(false);
 
   const { id: conversationId } = useParams();
 
   const currentUser = useStore((state) => state.currentUser);
+  
 
   const [isImageViewOpened, setIsImageViewOpened] = useState(false);
 
@@ -99,7 +115,7 @@ const RightMessage: FC<RightMessageProps> = ({ message, setReplyInfo, showModal,
                         showModal={showModal}
                         intent={{
                           money: "10000",
-                          user: "asld",
+                          user: currentUser,
                           type: intent ?? SendMoneyIntentionType.NOTHING,
                         }}
                       >

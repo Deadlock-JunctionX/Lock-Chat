@@ -28,7 +28,6 @@ const App: FC = () => {
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        console.log("USer", user.toJSON());
         setCurrentUser(user);
         setDoc(doc(db, "users", user.uid), {
           uid: user.uid,

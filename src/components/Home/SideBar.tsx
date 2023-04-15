@@ -108,7 +108,7 @@ const SideBar: FC = () => {
           </div>
         ) : error ? (
           <div className="my-6 flex justify-center">
-            <p className="text-center">Something went wrong Fucker {error}</p>
+            <p className="text-center">Something went wrong</p>
           </div>
         ) : data?.empty ? (
           <div className="my-6 flex flex-col items-center justify-center">

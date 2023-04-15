@@ -1,4 +1,8 @@
-import { SmileOutlined } from "@ant-design/icons";
+import {
+  SmileOutlined,
+  VerticalLeftOutlined,
+  VerticalRightOutlined,
+} from "@ant-design/icons";
 import {
   Button,
   Form,
@@ -15,6 +19,7 @@ import { getUserAccount, impersonateUser, submitTransaction } from "./api";
 import PinInput from "react-pin-input";
 import { User } from "firebase/auth";
 import React from "react";
+import BankSelection from "./BankSelection";
 
 export interface MoneyTransactionProp {
   otherUser?: User;
@@ -80,36 +85,28 @@ export const MoneyTransaction = (props: MoneyTransactionProp) => {
 
   return (
     <div style={{ marginTop: "2rem" }}>
-      <Steps current={current} items={items} />
       <div style={contentStyle}>{steps[current].content}</div>
       <div style={{ marginTop: 24 }}>
+        {current > 0 && (
+          <Button
+            shape="round"
+            icon={<VerticalRightOutlined />}
+            onClick={() => prev()}
+          />
+        )}
         {current < steps.length - 1 && (
           <Button
-            style={{ backgroundColor: "#4096ff" }}
-            type="primary"
+            shape="round"
+            icon={<VerticalLeftOutlined />}
             onClick={() => next()}
-            disabled={!validateStep(firstCondition, secCondition, current)}
-          >
-            Next
-          </Button>
+          />
         )}
         {current === steps.length - 1 && (
           <Button
-            style={{ backgroundColor: "#4096ff" }}
-            type="primary"
+            shape="round"
+            icon={<VerticalLeftOutlined />}
             onClick={() => message.success("Processing complete!")}
-          >
-            Done
-          </Button>
-        )}
-        {current > 0 && (
-          <Button
-            style={{ margin: "0 8px" }}
-            type="ghost"
-            onClick={() => prev()}
-          >
-            Previous
-          </Button>
+          />
         )}
       </div>
     </div>
@@ -130,19 +127,20 @@ const MoneyTransactionForm = ({
   };
   console.log("Other User", otherUser);
   const form = React.useRef<FormInstance>(null);
-  form.current?.setFieldsValue({
-    name: otherUser?.displayName,
-    bankNumber: otherUser?.phoneNumber,
-  });
+  useEffect(() => {
+    form.current?.setFieldsValue({
+      name: otherUser?.displayName,
+      bankNumber: otherUser?.phoneNumber,
+    });
+  }, [otherUser]);
+
   return (
     <Form
       ref={form}
       name="send-money-form"
-      initialValues={{ remember: true }}
       onFinish={onFinish}
       onFinishFailed={onFinishFailed}
       autoComplete="off"
-      layout="vertical"
       onSubmitCapture={() => {
         getUserAccount("").then((data) => {
           setUserAccountInfo(data);
@@ -159,19 +157,19 @@ const MoneyTransactionForm = ({
       </Form.Item>
 
       <Form.Item
-        label="Bank"
+        label="Bạn muốn chuyển khoản đến"
         name="bank"
         rules={[{ required: true, message: "Please input your bank!" }]}
       >
-        <Input />
+        <BankSelection />
       </Form.Item>
 
       <Form.Item
-        label="Số tài khoản"
+        label="Số tài khoản người nhận"
         name="bankNumber"
-        rules={[{ required: true, message: "Nhập số tài khoản người nhận" }]}
+        rules={[{ required: true, message: "Please input your STK" }]}
       >
-        <Input />
+        <Input bordered={false} />
       </Form.Item>
     </Form>
   );

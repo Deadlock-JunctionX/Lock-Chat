@@ -31,6 +31,7 @@ import StickerPicker from "./StickerPicker";
 import { formatFileName } from "../../shared/utils";
 import { useParams } from "react-router-dom";
 import { useStore } from "../../store";
+import axios from 'axios';
 
 const Picker = lazy(() => import("./EmojiPicker"));
 
@@ -121,19 +122,22 @@ const InputSection: FC<InputSectionProps> = ({
 
     setReplyInfo && setReplyInfo(null);
 
-    const intent = 0 //Take from API
-
-    addDoc(
-      collection(db, "conversations", conversationId as string, "messages"),
-      {
-        sender: currentUser?.uid,
-        content: replacedInputValue.trim(),
-        type: "text",
-        createdAt: serverTimestamp(),
-        replyTo: replyInfo?.id || null,
-        intent: intent
-      }
-    );
+    axios.post(`http://localhost:8000/process?ms=${replacedInputValue}`)
+    .then(res => {
+      const intent = res.data
+      addDoc(
+        collection(db, "conversations", conversationId as string, "messages"),
+        {
+          sender: currentUser?.uid,
+          content: replacedInputValue.trim(),
+          type: "text",
+          createdAt: serverTimestamp(),
+          replyTo: replyInfo?.id || null,
+          intent: intent,
+        }
+      );
+    })
+    .catch(error => {})
 
     updateTimestamp();
   };

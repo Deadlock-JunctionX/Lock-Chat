@@ -126,6 +126,7 @@ const RightMessage: FC<RightMessageProps> = ({
                             intent?.intent === SendMoneyIntentionType.SEND) ||
                           false
                         }
+                        intentVisible={message.intentVisible}
                       >
                         <span>{item}</span>
                       </ReplyWrapper>

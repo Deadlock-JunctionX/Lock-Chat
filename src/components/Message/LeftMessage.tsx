@@ -1,4 +1,9 @@
-import { ConversationInfo, MessageItem, SendMoneyIntentionResponse, SendMoneyIntentionType } from "../../shared/types";
+import {
+  ConversationInfo,
+  MessageItem,
+  SendMoneyIntentionResponse,
+  SendMoneyIntentionType,
+} from "../../shared/types";
 import { FC, Fragment, useState } from "react";
 import {
   formatDate,
@@ -28,7 +33,7 @@ interface LeftMessageProps {
   setReplyInfo: (value: any) => void;
   showModal: () => void;
   setAmount: (value: number | string | undefined) => void;
-  intent?: SendMoneyIntentionResponse
+  intent?: SendMoneyIntentionResponse;
 }
 
 const LeftMessage: FC<LeftMessageProps> = ({
@@ -39,7 +44,7 @@ const LeftMessage: FC<LeftMessageProps> = ({
   setReplyInfo,
   showModal,
   setAmount,
-  intent
+  intent,
 }) => {
   const [isSelectReactionOpened, setIsSelectReactionOpened] = useState(false);
   const currentUser = useStore((state) => state.currentUser);
@@ -113,7 +118,13 @@ const LeftMessage: FC<LeftMessageProps> = ({
                           user: currentUser,
                           type: intent?.intent,
                         }}
-                        verify={intent && intent?.intent === SendMoneyIntentionType.RECEIVE || false}
+                        verify={
+                          (intent &&
+                            intent?.intent ===
+                              SendMoneyIntentionType.RECEIVE) ||
+                          false
+                        }
+                        intentVisible={message.intentVisible}
                       >
                         <span>{item}</span>
                       </ReplyWrapper>

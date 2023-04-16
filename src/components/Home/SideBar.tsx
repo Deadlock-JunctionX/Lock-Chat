@@ -46,7 +46,7 @@ const SideBar: FC = () => {
         <div className="border-dark-lighten flex h-20 items-center justify-between border-b px-6">
           <Link to="/" className="flex items-center gap-1">
             <img className="h-8 w-8" src="/icon.svg" alt="" />
-            <h1 className="text-xl">FireVerse</h1>
+            <h1 className="text-xl">Wisebill</h1>
           </Link>
 
           <div className="flex items-center gap-1">
@@ -86,14 +86,14 @@ const SideBar: FC = () => {
                       className="hover:bg-dark-lighten flex items-center gap-1 px-3 py-1 transition duration-300"
                     >
                       <i className="bx bxs-user text-xl"></i>
-                      <span className="whitespace-nowrap">Profile</span>
+                      <span className="whitespace-nowrap">Thông tin cá nhân</span>
                     </button>
                     <button
                       onClick={() => signOut(auth)}
                       className="hover:bg-dark-lighten flex items-center gap-1 px-3 py-1 transition duration-300"
                     >
                       <i className="bx bx-log-out text-xl"></i>
-                      <span className="whitespace-nowrap">Sign Out</span>
+                      <span className="whitespace-nowrap">Đăng Xuất</span>
                     </button>
                   </div>
                 </div>

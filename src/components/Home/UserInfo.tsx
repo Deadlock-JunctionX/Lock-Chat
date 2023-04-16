@@ -25,7 +25,7 @@ const UserInfo: FC<UserInfoProps> = ({ isOpened, setIsOpened }) => {
           <div className="flex-1"></div>
           <div className="flex flex-1 items-center justify-center">
             <h1 className="whitespace-nowrap text-center text-2xl">
-              Your Profile
+              Thông tin cá nhân
             </h1>
           </div>
           <div className="flex flex-1 items-center justify-end">

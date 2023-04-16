@@ -109,7 +109,7 @@ const ConversationSettings: FC<ConversationConfigProps> = ({
           <div className="flex-1"></div>
           <div className="flex flex-1 items-center justify-center">
             <h1 className="whitespace-nowrap text-center text-2xl">
-              Conversation settings
+              Cài đặt
             </h1>
           </div>
           <div className="flex flex-1 items-center justify-end">
@@ -131,7 +131,7 @@ const ConversationSettings: FC<ConversationConfigProps> = ({
               >
                 <div className="flex items-center gap-3">
                   <i className="bx bx-edit-alt text-2xl"></i>
-                  <span>Change chat name</span>
+                  <span>Đổi tên nhóm chat</span>
                 </div>
 
                 <i
@@ -161,7 +161,7 @@ const ConversationSettings: FC<ConversationConfigProps> = ({
                 className="bg-dark flex items-center gap-3 rounded-lg px-3 py-2 transition duration-300 hover:brightness-125"
               >
                 <i className="bx bx-image-alt text-2xl"></i>
-                <span>Change group photo</span>
+                <span>Đổi ảnh nhóm chat</span>
               </button>
 
               <input
@@ -187,7 +187,7 @@ const ConversationSettings: FC<ConversationConfigProps> = ({
           >
             <div className="flex items-center gap-3">
               <i className="bx bx-palette text-2xl"></i>
-              <span>Change theme</span>
+              <span>Đổi màu chủ đạo</span>
             </div>
 
             <i
@@ -219,7 +219,7 @@ const ConversationSettings: FC<ConversationConfigProps> = ({
             className="bg-dark flex items-center gap-3 rounded-lg px-3 py-2 transition duration-300 hover:brightness-125"
           >
             <i className="bx bxs-file text-2xl"></i>
-            <span>View images & files</span>
+            <span>Xem ảnh và tập tin</span>
           </button>
 
           {conversation.users.length > 2 && (

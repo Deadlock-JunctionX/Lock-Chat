@@ -134,6 +134,7 @@ const InputSection: FC<InputSectionProps> = ({
           createdAt: serverTimestamp(),
           replyTo: replyInfo?.id || null,
           intent: intent,
+          intentVisible: true
         }
       );
     })

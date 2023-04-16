@@ -60,6 +60,7 @@ export interface MessageItem {
     [key: string]: number;
   };
   intent: SendMoneyIntentionResponse;
+  intentVisible: boolean
 }
 
 export interface StickerCollection {

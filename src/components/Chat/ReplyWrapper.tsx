@@ -10,11 +10,12 @@ export interface ReplyWrapperProps {
   setAmount: (value: number | string | undefined) => void;
   showModal: () => void;
   verify: boolean;
+  intentVisible: boolean
 }
 
 export const ReplyWrapper = (props: ReplyWrapperProps) => {
   const intent = props.intent;
-  return props.verify ? (
+  return props.verify && props.intentVisible ? (
     <div>
       {props.children} <hr className="my-1" />
       <button

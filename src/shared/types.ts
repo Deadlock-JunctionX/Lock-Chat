@@ -1,4 +1,4 @@
-import { User } from 'firebase/auth';
+import { User } from "firebase/auth";
 export interface ConversationInfo {
   users: string[];
   group?: {
@@ -26,17 +26,21 @@ export interface SavedUser {
 }
 
 export enum SendMoneyIntentionType {
-  SEND,
-  RECEIVE,
-  NOTHING
+  SEND = "PAYBACK",
+  RECEIVE = "LENDING",
+  NOTHING = "",
+}
+
+export type SendMoneyIntentionResponse = {
+  intent: SendMoneyIntentionType
+  amount: number[]
 }
 
 export type SendMoneyIntention = {
   user?: User | null;
-  money: string;
-  type: SendMoneyIntentionType
+  money?: string;
+  type?: SendMoneyIntentionType;
 };
-
 
 export interface MessageItem {
   id?: string;
@@ -55,7 +59,7 @@ export interface MessageItem {
   reactions: {
     [key: string]: number;
   };
-  intent: SendMoneyIntentionType;
+  intent: SendMoneyIntentionResponse;
 }
 
 export interface StickerCollection {

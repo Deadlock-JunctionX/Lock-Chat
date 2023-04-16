@@ -12,7 +12,8 @@ export interface ReplyWrapperProps {
 
 export const ReplyWrapper = (props: ReplyWrapperProps) => {
   const intent = props.intent;
-  return true ? (
+  console.log("intenttt", intent);
+  return intent && intent?.type === SendMoneyIntentionType.SEND ? (
     <div>
       {props.children} <hr className="my-1" />
       <button
@@ -31,12 +32,7 @@ export const ReplyWrapper = (props: ReplyWrapperProps) => {
 
 export const SendMoneyForm = (props: any) => {
   return (
-    <Modal
-      centered
-      open={props.visible}
-      onCancel={props.onClose}
-      footer={null}
-    >
+    <Modal centered open={props.visible} onCancel={props.onClose} footer={null}>
       <MoneyTransaction otherUser={props.otherUser} />
     </Modal>
   );

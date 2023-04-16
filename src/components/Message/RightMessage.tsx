@@ -20,7 +20,7 @@ import ImageView from "../ImageView";
 import {
   ConversationInfo,
   MessageItem,
-  SendMoneyIntentionType,
+  SendMoneyIntentionResponse,
 } from "../../shared/types";
 import ReactionPopup from "../Chat/ReactionPopup";
 import ReactionStatus from "../Chat/ReactionStatus";
@@ -36,7 +36,7 @@ import { User } from "firebase/auth";
 interface RightMessageProps {
   message: MessageItem;
   replyInfo: any;
-  intent?: SendMoneyIntentionType;
+  intent?: SendMoneyIntentionResponse;
   conversation: ConversationInfo;
   setReplyInfo: (value: any) => void;
   showModal: () => void;
@@ -114,9 +114,9 @@ const RightMessage: FC<RightMessageProps> = ({
                         key={index}
                         showModal={showModal}
                         intent={{
-                          money: "10000",
+                          money: intent?.amount?.[0].toString(),
                           user: currentUser,
-                          type: intent ?? SendMoneyIntentionType.NOTHING,
+                          type: intent?.intent,
                         }}
                       >
                         <span>{item}</span>

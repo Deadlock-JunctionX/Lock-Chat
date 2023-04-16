@@ -1,6 +1,7 @@
 import { FC } from "react";
 import { IMAGE_PROXY } from "../../shared/constants";
 import { useStore } from "../../store";
+import { getDefaultPhoneNum } from "../../utils";
 
 interface UserInfoProps {
   isOpened: boolean;
@@ -48,12 +49,17 @@ const UserInfo: FC<UserInfoProps> = ({ isOpened, setIsOpened }) => {
               <h1 className="text-xl">{currentUser?.displayName}</h1>
               <p>ID: {currentUser?.uid}</p>
               <p>Email: {currentUser?.email || "None"}</p>
-              <p>Phone Number: {currentUser?.phoneNumber || "None"}</p>
+              <p>
+                Số điện thoại:{" "}
+                {currentUser?.phoneNumber ||
+                  getDefaultPhoneNum(currentUser?.email) ||
+                  "None"}
+              </p>
             </div>
           </div>
 
           <p className="mt-4 text-gray-400">
-            Change your google / facebook avatar or username to update it here
+            Thay đổi ảnh đại diện google để cập nhật ở đây
           </p>
         </div>
       </div>

@@ -96,7 +96,7 @@ const CreateConversation: FC<CreateConversationProps> = ({ setIsOpened }) => {
           <div className="flex-1"></div>
           <div className="flex flex-1 items-center justify-center">
             <h1 className="whitespace-nowrap text-center text-2xl">
-              New conversation
+              Cuộc trò chuyện mới
             </h1>
           </div>
           <div className="flex flex-1 items-center justify-end">
@@ -153,7 +153,7 @@ const CreateConversation: FC<CreateConversationProps> = ({ setIsOpened }) => {
                 onClick={handleCreateConversation}
                 className="bg-dark-lighten rounded-lg py-2 px-3 transition duration-300 hover:brightness-125 disabled:!brightness-[80%]"
               >
-                Start conversation
+                Bắt đầu trò chuyện
               </button>
             </div>
           </>

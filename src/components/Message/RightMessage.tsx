@@ -21,6 +21,7 @@ import {
   ConversationInfo,
   MessageItem,
   SendMoneyIntentionResponse,
+  SendMoneyIntentionType,
 } from "../../shared/types";
 import ReactionPopup from "../Chat/ReactionPopup";
 import ReactionStatus from "../Chat/ReactionStatus";
@@ -116,10 +117,15 @@ const RightMessage: FC<RightMessageProps> = ({
                         showModal={showModal}
                         setAmount={setAmount}
                         intent={{
-                          money: intent?.amount?.[0].toString(),
+                          money: intent?.amount?.[0]?.toString(),
                           user: currentUser,
                           type: intent?.intent,
                         }}
+                        verify={
+                          (intent &&
+                            intent?.intent === SendMoneyIntentionType.SEND) ||
+                          false
+                        }
                       >
                         <span>{item}</span>
                       </ReplyWrapper>

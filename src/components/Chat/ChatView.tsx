@@ -190,7 +190,9 @@ const ChatView: FC<ChatViewProps> = ({
                   message={item}
                   index={index}
                   docs={data?.docs}
+                  intent={item.intent}
                   conversation={conversation}
+                  setAmount={setAmount}
                 />
               )}
               {Object.entries(conversation.seen).filter(

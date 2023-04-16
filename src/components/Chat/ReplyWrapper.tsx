@@ -9,11 +9,12 @@ export interface ReplyWrapperProps {
   children?: React.ReactChild;
   setAmount: (value: number | string | undefined) => void;
   showModal: () => void;
+  verify: boolean;
 }
 
 export const ReplyWrapper = (props: ReplyWrapperProps) => {
   const intent = props.intent;
-  return intent && intent?.type === SendMoneyIntentionType.SEND ? (
+  return props.verify ? (
     <div>
       {props.children} <hr className="my-1" />
       <button
@@ -32,10 +33,13 @@ export const ReplyWrapper = (props: ReplyWrapperProps) => {
 };
 
 export const SendMoneyForm = (props: any) => {
-  console.log("Amountttt", props.amount);
   return (
     <Modal centered open={props.visible} onCancel={props.onClose} footer={null}>
-      <MoneyTransaction amount={props.amount} otherUser={props.otherUser} />
+      <MoneyTransaction
+        destroyModal={props.onClose}
+        amount={props.amount}
+        otherUser={props.otherUser}
+      />
     </Modal>
   );
 };

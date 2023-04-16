@@ -1,4 +1,4 @@
-import { ConversationInfo, MessageItem } from "../../shared/types";
+import { ConversationInfo, MessageItem, SendMoneyIntentionResponse, SendMoneyIntentionType } from "../../shared/types";
 import { FC, Fragment, useState } from "react";
 import {
   formatDate,
@@ -17,6 +17,7 @@ import ReplyBadge from "../Chat/ReplyBadge";
 import ReplyIcon from "../Icon/ReplyIcon";
 import SpriteRenderer from "../SpriteRenderer";
 import { useStore } from "../../store";
+import { ReplyWrapper } from "../Chat/ReplyWrapper";
 
 interface LeftMessageProps {
   message: MessageItem;
@@ -26,6 +27,8 @@ interface LeftMessageProps {
   replyInfo: any;
   setReplyInfo: (value: any) => void;
   showModal: () => void;
+  setAmount: (value: number | string | undefined) => void;
+  intent?: SendMoneyIntentionResponse
 }
 
 const LeftMessage: FC<LeftMessageProps> = ({
@@ -34,6 +37,9 @@ const LeftMessage: FC<LeftMessageProps> = ({
   index,
   docs,
   setReplyInfo,
+  showModal,
+  setAmount,
+  intent
 }) => {
   const [isSelectReactionOpened, setIsSelectReactionOpened] = useState(false);
   const currentUser = useStore((state) => state.currentUser);
@@ -98,7 +104,19 @@ const LeftMessage: FC<LeftMessageProps> = ({
                 {splitLinkFromMessage(message.content).map((item, index) => (
                   <Fragment key={index}>
                     {typeof item === "string" ? (
-                      <span>{item}</span>
+                      <ReplyWrapper
+                        key={index}
+                        showModal={showModal}
+                        setAmount={setAmount}
+                        intent={{
+                          money: intent?.amount?.[0]?.toString(),
+                          user: currentUser,
+                          type: intent?.intent,
+                        }}
+                        verify={intent && intent?.intent === SendMoneyIntentionType.RECEIVE || false}
+                      >
+                        <span>{item}</span>
+                      </ReplyWrapper>
                     ) : (
                       <a
                         className="mx-1 inline underline"

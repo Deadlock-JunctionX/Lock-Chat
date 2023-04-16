@@ -17,19 +17,19 @@ import { User } from "firebase/auth";
 import React from "react";
 import BankSelection from "./BankSelection";
 import { useStore } from "../../store";
+import { getDefaultBankNum, getDefaultPhoneNum } from "../../utils";
 
 const { Title } = Typography;
 export interface MoneyTransactionProp {
   otherUser?: User;
   amount?: number;
+  destroyModal: () => void;
 }
 
 export const MoneyTransaction = (props: MoneyTransactionProp) => {
   const [transactionInfo, setTransactionInfo] = useState<any>();
   const [formValue, setFormValue] = useState<any>({});
   const form = React.useRef<FormInstance>(null);
-
-  console.log("Form Value", formValue);
 
   const steps = [
     {
@@ -51,12 +51,11 @@ export const MoneyTransaction = (props: MoneyTransactionProp) => {
           bankName={formValue["bank"]}
           bankNumber={formValue["bankNumber"]}
           amount={formValue["amount"]}
+          destroyModal={props.destroyModal}
         />
       ),
     },
   ];
-
-  console.log("OASALSKn", props.otherUser);
 
   const { token } = theme.useToken();
   const [current, setCurrent] = useState(0);
@@ -99,7 +98,7 @@ export const MoneyTransaction = (props: MoneyTransactionProp) => {
               style={{ backgroundColor: "#4096ff" }}
               type="primary"
               onClick={() => {
-                getUserAccount(form.current?.getFieldValue("bankNumber")).then(
+                getUserAccount(form.current?.getFieldValue("phoneNumber")).then(
                   (data) => {
                     setTransactionInfo(data);
                   }
@@ -130,14 +129,18 @@ const MoneyTransactionForm = ({
     });
   };
 
+  const currentUser = useStore((state) => state.currentUser);
+
   const onFinishFailed = (errorInfo: any) => {
     console.log("Failed:", errorInfo);
   };
   useEffect(() => {
     form.current?.setFieldsValue({
       name: otherUser?.displayName,
-      bankNumber: otherUser?.phoneNumber,
+      bankNumber: getDefaultBankNum(otherUser?.email),
       amount: amount || 0,
+      phoneNumber:
+        currentUser?.phoneNumber || getDefaultPhoneNum(currentUser?.email),
     });
   }, [otherUser, amount]);
 
@@ -160,6 +163,18 @@ const MoneyTransactionForm = ({
       <Form.Item
         label="Số tài khoản người nhận"
         name="bankNumber"
+        rules={[{ required: true, message: "Please input your STK" }]}
+      >
+        <Input
+          placeholder="_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _"
+          prefix={<NumberOutlined />}
+          bordered={false}
+        />
+      </Form.Item>
+
+      <Form.Item
+        label="Số điện thoại người gửi"
+        name="phoneNumber"
         rules={[{ required: true, message: "Please input your STK" }]}
       >
         <Input
@@ -197,13 +212,12 @@ const MoneyTransactionPinConfirm = ({
   bankName,
   bankNumber,
   amount,
+  destroyModal,
 }: any) => {
   const [pinValue, setPinValue] = useState<string>("");
   const [pinStatus, setPinStatus] = useState<ValidateStatus>();
   const [pinErrorMsg, setPinErrorMsg] = useState<string>();
   const currentUser = useStore((state) => state.currentUser);
-
-  console.log("User Acc Info", receiver);
 
   const validatePin = (pin: string) => {
     return pin === "123456";
@@ -221,7 +235,8 @@ const MoneyTransactionPinConfirm = ({
             bankNumber,
             amount
           ).then(() => {
-            message.success("Chuyển khoản thành công")
+            message.success("Chuyển khoản thành công");
+            destroyModal();
           });
         });
       else {

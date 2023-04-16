@@ -40,12 +40,14 @@ interface RightMessageProps {
   conversation: ConversationInfo;
   setReplyInfo: (value: any) => void;
   showModal: () => void;
+  setAmount: (value: number | string | undefined) => void;
 }
 
 const RightMessage: FC<RightMessageProps> = ({
   message,
   setReplyInfo,
   showModal,
+  setAmount,
   intent,
   conversation,
 }) => {
@@ -54,7 +56,6 @@ const RightMessage: FC<RightMessageProps> = ({
   const { id: conversationId } = useParams();
 
   const currentUser = useStore((state) => state.currentUser);
-  
 
   const [isImageViewOpened, setIsImageViewOpened] = useState(false);
 
@@ -113,6 +114,7 @@ const RightMessage: FC<RightMessageProps> = ({
                       <ReplyWrapper
                         key={index}
                         showModal={showModal}
+                        setAmount={setAmount}
                         intent={{
                           money: intent?.amount?.[0].toString(),
                           user: currentUser,

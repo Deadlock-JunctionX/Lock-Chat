@@ -44,6 +44,8 @@ const ChatView: FC<ChatViewProps> = ({
 
   const [limitCount, setLimitCount] = useState(10);
   const [modalVisible, setModalVisible] = useState<boolean>(false);
+  const [amount, setAmount] = useState<any>();
+
   const showModal = () => {
     setModalVisible(true);
   };
@@ -174,6 +176,7 @@ const ChatView: FC<ChatViewProps> = ({
                 <RightMessage
                   showModal={showModal}
                   replyInfo={replyInfo}
+                  setAmount={setAmount}
                   setReplyInfo={setReplyInfo}
                   message={item}
                   intent={item.intent}
@@ -211,6 +214,7 @@ const ChatView: FC<ChatViewProps> = ({
       <SendMoneyForm
         otherUser={otherUser}
         visible={modalVisible}
+        amount={amount}
         onClose={() => {
           setModalVisible(false);
         }}

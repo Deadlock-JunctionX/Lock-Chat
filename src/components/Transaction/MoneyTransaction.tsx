@@ -1,36 +1,44 @@
 import { ValidateStatus } from "antd/es/form/FormItem";
-import { SmileOutlined, VerticalRightOutlined, VerticalLeftOutlined, NumberOutlined, UserOutlined } from "@ant-design/icons";
-import { Button, Form, FormInstance, Input, message, Result, Space, theme, Typography } from "antd";
+import { NumberOutlined, UserOutlined } from "@ant-design/icons";
+import {
+  Button,
+  Form,
+  FormInstance,
+  Input,
+  message,
+  Space,
+  theme,
+  Typography,
+} from "antd";
 import { useEffect, useState } from "react";
 import { getUserAccount, impersonateUser, submitTransaction } from "./api";
 import PinInput from "react-pin-input";
 import { User } from "firebase/auth";
 import React from "react";
 import BankSelection from "./BankSelection";
+import { useStore } from "../../store";
 
 const { Title } = Typography;
 export interface MoneyTransactionProp {
   otherUser?: User;
+  amount?: number;
 }
-const validateStep = (
-  firstCondition: boolean,
-  secCondition: boolean,
-  step: number
-) => {
-  return (firstCondition && step === 0) || (secCondition && step === 1);
-};
 
 export const MoneyTransaction = (props: MoneyTransactionProp) => {
-  const [firstCondition, setFirstCondition] = useState<boolean>(false);
-  const [secCondition, setSecCondition] = useState<boolean>(false);
+  const [transactionInfo, setTransactionInfo] = useState<any>();
+  const [formValue, setFormValue] = useState<any>({});
+  const form = React.useRef<FormInstance>(null);
+
+  console.log("Form Value", formValue);
 
   const steps = [
     {
       title: "Thông tin chuyển tiền",
       content: (
         <MoneyTransactionForm
-          setStatus={(value: boolean) => setFirstCondition(value)}
           otherUser={props.otherUser}
+          form={form}
+          amount={props.amount}
         />
       ),
     },
@@ -38,24 +46,29 @@ export const MoneyTransaction = (props: MoneyTransactionProp) => {
       title: "Nhập mã pin",
       content: (
         <MoneyTransactionPinConfirm
-          setStatus={(value: boolean) => setSecCondition(value)}
+          transactionInfo={transactionInfo}
+          receiver={formValue["name"] || props.otherUser?.displayName}
+          bankName={formValue["bank"]}
+          bankNumber={formValue["bankNumber"]}
+          amount={formValue["amount"]}
         />
       ),
-    }
+    },
   ];
+
+  console.log("OASALSKn", props.otherUser);
 
   const { token } = theme.useToken();
   const [current, setCurrent] = useState(0);
 
   const next = () => {
     setCurrent(current + 1);
+    setFormValue(form.current?.getFieldsValue());
   };
 
   const prev = () => {
     setCurrent(current - 1);
   };
-
-  const items = steps.map((item) => ({ key: item.title, title: item.title }));
 
   const contentStyle: React.CSSProperties = {
     lineHeight: "260px",
@@ -69,17 +82,30 @@ export const MoneyTransaction = (props: MoneyTransactionProp) => {
 
   return (
     <div style={{ marginTop: "2rem" }}>
-      <Space direction="horizontal" style={{ width: '100%', justifyContent: 'center' }}>
+      <Space
+        direction="horizontal"
+        style={{ width: "100%", justifyContent: "center" }}
+      >
         <Title level={5}>{steps[current].title}</Title>
       </Space>
       <div style={contentStyle}>{steps[current].content}</div>
       <div style={{ marginTop: 24 }}>
-        <Space direction="horizontal" style={{ width: '100%', justifyContent: 'center' }}>
+        <Space
+          direction="horizontal"
+          style={{ width: "100%", justifyContent: "center" }}
+        >
           {current == 0 && (
             <Button
               style={{ backgroundColor: "#4096ff" }}
               type="primary"
-              onClick={() => next()}
+              onClick={() => {
+                getUserAccount(form.current?.getFieldValue("bankNumber")).then(
+                  (data) => {
+                    setTransactionInfo(data);
+                  }
+                );
+                next();
+              }}
             >
               Hoàn thành
             </Button>
@@ -94,22 +120,26 @@ const MoneyTransactionForm = ({
   setUserAccountInfo,
   setStatus,
   otherUser,
+  form,
+  amount,
 }: any) => {
   const onFinish = (values: any) => {
-    console.log("Success:", values);
+    getUserAccount(form.current?.getFieldValue("bankNumber")).then((data) => {
+      setUserAccountInfo(data);
+      setStatus(true);
+    });
   };
 
   const onFinishFailed = (errorInfo: any) => {
     console.log("Failed:", errorInfo);
   };
-  console.log("Other User", otherUser);
-  const form = React.useRef<FormInstance>(null);
   useEffect(() => {
     form.current?.setFieldsValue({
       name: otherUser?.displayName,
       bankNumber: otherUser?.phoneNumber,
+      amount: amount || 0,
     });
-  }, [otherUser]);
+  }, [otherUser, amount]);
 
   return (
     <Form
@@ -118,12 +148,6 @@ const MoneyTransactionForm = ({
       onFinish={onFinish}
       onFinishFailed={onFinishFailed}
       autoComplete="off"
-      onSubmitCapture={() => {
-        getUserAccount("").then((data) => {
-          setUserAccountInfo(data);
-          setStatus(true);
-        });
-      }}
     >
       <Form.Item
         label="Bạn muốn chuyển khoản đến"
@@ -138,7 +162,11 @@ const MoneyTransactionForm = ({
         name="bankNumber"
         rules={[{ required: true, message: "Please input your STK" }]}
       >
-        <Input placeholder="_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _" prefix={<NumberOutlined />} bordered={false} />
+        <Input
+          placeholder="_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _"
+          prefix={<NumberOutlined />}
+          bordered={false}
+        />
       </Form.Item>
 
       <Form.Item
@@ -149,14 +177,33 @@ const MoneyTransactionForm = ({
         <Input prefix={<UserOutlined />} bordered={false} />
       </Form.Item>
 
+      <Form.Item
+        label="Số tiền muốn chuyển"
+        name="amount"
+        rules={[{ required: true, message: "Nhập số tiền muốn chuyển" }]}
+      >
+        <Input
+          placeholder="_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _"
+          bordered={false}
+        />
+      </Form.Item>
     </Form>
   );
 };
 
-const MoneyTransactionPinConfirm = ({ setStatus }: any) => {
+const MoneyTransactionPinConfirm = ({
+  transactionInfo,
+  receiver,
+  bankName,
+  bankNumber,
+  amount,
+}: any) => {
   const [pinValue, setPinValue] = useState<string>("");
   const [pinStatus, setPinStatus] = useState<ValidateStatus>();
   const [pinErrorMsg, setPinErrorMsg] = useState<string>();
+  const currentUser = useStore((state) => state.currentUser);
+
+  console.log("User Acc Info", receiver);
 
   const validatePin = (pin: string) => {
     return pin === "123456";
@@ -164,22 +211,26 @@ const MoneyTransactionPinConfirm = ({ setStatus }: any) => {
   useEffect(() => {
     if (pinValue.length === 6) {
       if (validatePin(pinValue))
-        impersonateUser("").then((data) => {
-          // submitTransaction(data).then(() => {
-          //   setPinStatus("success");
-          //   setStatus(true);
-          // });
-
+        impersonateUser(transactionInfo?.user_id).then((data) => {
+          submitTransaction(
+            data?.token,
+            receiver,
+            currentUser || null,
+            transactionInfo?.id,
+            bankName,
+            bankNumber,
+            amount
+          ).then(() => {
+            message.success("Chuyển khoản thành công")
+          });
         });
       else {
         setPinErrorMsg("Mã PIN sai rồi");
         setPinStatus("error");
-        setStatus(false);
       }
     } else {
       setPinErrorMsg("");
       setPinStatus("");
-      setStatus(false);
     }
   }, [pinValue]);
   return (
@@ -197,19 +248,9 @@ const MoneyTransactionPinConfirm = ({ setStatus }: any) => {
           }}
           type="numeric"
           inputMode="number"
-          inputFocusStyle={{borderColor: 'blue'}}
+          inputFocusStyle={{ borderColor: "blue" }}
         />
       </Form.Item>
     </Form>
-  );
-};
-
-const MoneyTransactionSuccess = () => {
-  return (
-    <Result
-      style={{ maxHeight: "380px" }}
-      icon={<SmileOutlined style={{ fontSize: "48px" }} />}
-      title="Great, we have done all the operations!"
-    />
   );
 };

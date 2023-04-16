@@ -7,12 +7,12 @@ import { MoneyTransaction } from "../Transaction/MoneyTransaction";
 export interface ReplyWrapperProps {
   intent: SendMoneyIntention;
   children?: React.ReactChild;
+  setAmount: (value: number | string | undefined) => void;
   showModal: () => void;
 }
 
 export const ReplyWrapper = (props: ReplyWrapperProps) => {
   const intent = props.intent;
-  console.log("intenttt", intent);
   return intent && intent?.type === SendMoneyIntentionType.SEND ? (
     <div>
       {props.children} <hr className="my-1" />
@@ -20,6 +20,7 @@ export const ReplyWrapper = (props: ReplyWrapperProps) => {
         className="p-2"
         onClick={() => {
           props.showModal();
+          props.setAmount(intent.money);
         }}
       >
         <strong>Chuyển tiền</strong>
@@ -31,9 +32,10 @@ export const ReplyWrapper = (props: ReplyWrapperProps) => {
 };
 
 export const SendMoneyForm = (props: any) => {
+  console.log("Amountttt", props.amount);
   return (
     <Modal centered open={props.visible} onCancel={props.onClose} footer={null}>
-      <MoneyTransaction otherUser={props.otherUser} />
+      <MoneyTransaction amount={props.amount} otherUser={props.otherUser} />
     </Modal>
   );
 };

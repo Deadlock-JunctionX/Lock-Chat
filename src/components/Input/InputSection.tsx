@@ -122,7 +122,7 @@ const InputSection: FC<InputSectionProps> = ({
 
     setReplyInfo && setReplyInfo(null);
 
-    axios.post(`http://34.143.217.244:8000/process?ms=${replacedInputValue}`)
+    axios.post(`https://intent.deadlock.lanpn.me/process?ms=${replacedInputValue}`)
     .then(res => {
       const intent = res.data
       addDoc(

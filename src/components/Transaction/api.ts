@@ -4,7 +4,7 @@ import axios from "axios";
 export const getUserAccount = async (phoneNumber: string): Promise<any> => {
   return (
     await axios.get(
-      "http://34.143.217.244:5000/api/trusted-app/accounts/search",
+      "https://wallet2.deadlock.lanpn.me/api/trusted-app/accounts/search",
       {
         params: {
           phone: phoneNumber,
@@ -23,7 +23,7 @@ export const getUserAccount = async (phoneNumber: string): Promise<any> => {
 export const impersonateUser = async (data: string): Promise<any> => {
   return (
     await axios.post(
-      `http://34.143.217.244:5000/api/trusted-app/impersonate?user_id=${data}`,
+      `https://wallet2.deadlock.lanpn.me/api/trusted-app/impersonate?user_id=${data}`,
       null,
       {
         headers: {
@@ -46,7 +46,7 @@ export const submitTransaction = async (
   amount?: number
 ): Promise<void> => {
   await axios.post(
-    "http://34.143.217.244:5000/api/transactions/submit",
+    "https://wallet2.deadlock.lanpn.me/api/transactions/submit",
     {
       from_account_id: sendUserBankAccount,
       to_bank: bankName,

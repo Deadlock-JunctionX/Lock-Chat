@@ -1,3 +1,3 @@
 # FireVerse
 
-Official Website: [https://lockchat.pages.dev](https://lockchat.pages.dev)
+Live Demo: [https://lockchat.pages.dev](https://lockchat.pages.dev)
